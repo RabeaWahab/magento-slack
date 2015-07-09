@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+    <name>Rabee3_Slack</name>
+    <version>0.1.0</version>
+    <stability>stable</stability>
+    <license>GPLv3</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Slack notifications for Orders and Customers</summary>
+    <description>Slack notifications for Orders and Customers</description>
+    <notes>Slack notifications for Orders and Customers</notes>
+    <authors><author><name>Rabee Abdelwahab</name><user>wahabr</user><email>wahab.r@gmail.com</email></author></authors>
+    <date>2015-07-09</date>
+    <time>21:55:30</time>
+    <contents><target name="magelocal"><dir name="Rabee3"><dir name="Slack"><dir name="Helper"><file name="Data.php" hash="a7f9c41d72801775a1ad506e17dc8b63"/></dir><dir name="Model"><file name="Observer.php" hash="0a80baf37e78969eb06f2d86cc86a0c3"/><file name="Slack.php" hash="b3b6c5801aedc1091c3622880c583326"/></dir><dir name="etc"><file name="config.xml" hash="bd4d4c46047efc8b2e12a1bc08a0ec2f"/><file name="system.xml" hash="a72ff000427b56c6d9facb72d0bfe151"/></dir></dir></dir></target><target name="mageetc"><dir name="."><file name="Rabee3_Slack.xml" hash=""/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.4.0</min><max>6.0.0</max></php></required></dependencies>
+</package>
