@@ -53,13 +53,22 @@
                             <show_in_store>1</show_in_store>
                         </channel>
                         <username translate="label">
-                            <label>Default Username: </label>
+                            <label>Default Username </label>
                             <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </username>
+                        <timeout translate="label">
+                            <label>Slack Notification Timout</label>
+                            <comment>Amount of time in miliseconds before Slack request is stopped</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </timeout>
                     </fields>
                 </general>
                 <orders translate="label"  module="slack">
