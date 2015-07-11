@@ -28,6 +28,7 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
     public $channel;
     public $webHook;
     public $slackConfig;
+    public $ttl;
 
     public function isEnabled($type)
     {
@@ -59,6 +60,19 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
         $this->getWebHook();
         $this->getChannel($type);
         $this->getUsername($type);
+        $this->getTTL();
+    }
+
+    public function getTTL()
+    {
+        $slackConfig = $this->slackConfig;
+        $ttl = $slackConfig['general']['timeout'];
+
+        if(empty($ttl) || !is_numeric($ttl)) {
+            $this->ttl = 300;
+        } else {
+            $this->ttl = $ttl;
+        }
     }
 
     public function getWebHook()
@@ -142,6 +156,7 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_URL, $this->webHook);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->ttl);
         curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => $messagePrepared));
 
         $result = curl_exec($ch);
