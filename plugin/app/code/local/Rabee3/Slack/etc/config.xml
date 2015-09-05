@@ -12,7 +12,7 @@
             </slack>
         </models>
         <events>
-            <checkout_onepage_controller_success_action>
+            <sales_order_place_after>
                 <observers>
                     <slack_ordersubmit>
                         <type>Singleton</type>
@@ -20,7 +20,7 @@
                         <method>slackNewOrder</method>
                     </slack_ordersubmit>
                 </observers>
-            </checkout_onepage_controller_success_action>
+            </sales_order_place_after>
             <customer_register_success>
                 <observers>
                     <slack_customerregister>
