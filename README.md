@@ -18,7 +18,7 @@ modgit -i plugin/:. add Rabee3_Slack https://github.com/rabee3/magento-slack.git
 [https://api.slack.com/incoming-webhooks](https://api.slack.com/incoming-webhooks)
 
 ## currently including:
-- Notification on order creation.
+- Notification on order creation. `this is based on a cron that runs every minute, please make sure your Magento cron.php is set to run at the same time`
 - Hourly Notification of total orders.
 - Customer new registration.
 
