@@ -14,10 +14,13 @@ modgit -i plugin/:. add Rabee3_Slack https://github.com/rabee3/magento-slack.git
 
 ```
 
+####Enable Slack incoming webhooks and obtain a token
+[https://api.slack.com/incoming-webhooks](https://api.slack.com/incoming-webhooks)
+
 ## currently including:
-- Orders creation.
+- Notification on order creation.
+- Hourly Notification of total orders.
 - Customer new registration.
-- Cron for hourly update on order.
 
 ## to do list
 - Notifications on exceptions.
