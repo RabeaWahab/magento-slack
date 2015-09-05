@@ -18,23 +18,32 @@ class Rabee3_Slack_Model_Observer
         return $this;
     }
 
-    public function slackNewOrder($observer)
+    public function ordersPerMinute()
     {
         $enabled = Mage::getModel('slack/slack')->isEnabled('orders');
         if(!$enabled) {
             return $this;
         }
 
-        $order = $observer->getEvent()->getOrder();
+        //$orderIds = $observer->getEvent()->getOrderIds();
+	//$order = Mage::getModel('sales/order')->load($orderIds[0]);
+        $timeFilter = array(
+                        'from'  => date('Y-m-d H:i:s', Mage::getSingleton('core/date')->gmtDate(time()-60)),
+                        'to'    => date('Y-m-d H:i:s', Mage::getSingleton('core/date')->gmtDate(time())),
+                );
+	$orders = Mage::getModel('sales/order')->getCollection()
+		->addAttributeToFilter('status', array('neq' => 'canceled'))
+		->addAttributeToFilter('created_at', $timeFilter);
 
-        $orderNumber        = $order->getIncrementId();
-        $orderTotal         = $order->getBaseGrandTotal();
-        $orderCreationDate  = $order->getCreatedAt();
+	foreach($orders as $order) {
+        	$orderNumber        = $order->getIncrementId();
+        	$orderTotal         = $order->getBaseGrandTotal();
+        	$orderCreationDate  = $order->getCreatedAt();
 
-        $message = "New Order Number: `".$orderNumber."` \nCreated At: `".$orderCreationDate."` \nTotal: `".$orderTotal."`";
-        $slacker = Mage::getModel('slack/slack')->send($message);
+        	$message = "New Order Number: `".$orderNumber."` \nCreated At: `".$orderCreationDate."` \nTotal: `".$orderTotal."`";
+        	$slacker = Mage::getModel('slack/slack')->send($message);
 
-        return $this;
+	}
     }
 
     public function ordersHourly()
@@ -51,7 +60,7 @@ class Rabee3_Slack_Model_Observer
 
         $ordersCount = Mage::getModel('sales/order')->getCollection()
             ->addAttributeToFilter('created_at', array('from' => $timeFilter['from'], 'to' => $timeFilter['to']))
-            ->addAttributeToFilter('status', array('neq' => 'canceled'))
+	    ->addAttributeToFilter('status', array('neq' => 'canceled'))
             ->count();
 
         $message = "Orders Created Last Hour : " . $ordersCount;

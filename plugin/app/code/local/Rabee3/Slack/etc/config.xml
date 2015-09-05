@@ -12,6 +12,7 @@
             </slack>
         </models>
         <events>
+		<!--
             <sales_order_place_after>
                 <observers>
                     <slack_ordersubmit>
@@ -21,6 +22,7 @@
                     </slack_ordersubmit>
                 </observers>
             </sales_order_place_after>
+		-->
             <customer_register_success>
                 <observers>
                     <slack_customerregister>
@@ -76,6 +78,14 @@
                     <model>slack/observer::ordersHourly</model>
                 </run>
             </slack_orders_hourly_check>
+	    <slack_orders_per_minute>
+		<schedule>
+		     <cron_expr>* * * * *</cron_expr>
+		</schedule>
+		<run>
+		    <model>slack/observer::ordersPerMinute</model>
+		</run>
+	    </slack_orders_per_minute>
         </jobs>
     </crontab>
 </config>

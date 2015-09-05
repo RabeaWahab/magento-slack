@@ -68,8 +68,8 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
         $slackConfig = $this->slackConfig;
         $ttl = $slackConfig['general']['timeout'];
 
-        if(empty($ttl) || !is_numeric($ttl) || $ttl < 1000) {
-            $this->ttl = 1000;
+        if(empty($ttl) || !is_numeric($ttl)) {
+            $this->ttl = 300;
         } else {
             $this->ttl = $ttl;
         }
@@ -89,23 +89,31 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
             if(!empty($orderChannel) && isset($orderChannel)) {
                 $this->channel = $orderChannel;
                 return;
-            }
+            } else {
+            	$generalChannel = $slackConfig['general']['channel'];
+            	if(!empty($generalChannel) && isset($generalChannel)) {
+			$this->channel = $generalChannel;
+			return;
+	    	}
+	    }
         } elseif ($slackType == self::SLACK_TYPE_CUSTOMERS) {
             $customerChannel = $slackConfig['customers']['channel'];
             if(!empty($customerChannel) && isset($customerChannel)) {
                 $this->channel = $customerChannel;
                 return;
             }
-        }
-
-        $generalChannel = $slackConfig['general']['channel'];
-        if(empty($this->channel) && !empty($generalChannel) && isset($generalChannel)) {
-            $this->channel = $generalChannel;
         } else {
-            $this->channel = 'MagentoStore';
+            $generalChannel = $slackConfig['general']['channel'];
+            if(empty($generalChannel) || !isset($generalChannel)) {
+                $this->channel = 'MagentoStore';
+            } else {
+                $this->channel = $generalChannel;
+            }
+
+            return;
         }
 
-        return;
+        $this->channel = 'MagentoStore';
     }
 
     public function getUsername($slackType)
@@ -117,23 +125,34 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
             if(!empty($orderUserName) && isset($orderUserName)) {
                 $this->userName = $orderUserName;
                 return;
-            }
+            } else {
+            	$generalUserName = $slackConfig['general']['username'];
+            	if(!empty($generalUserName) && isset($generalUserName)) {
+                	$this->userName = $generalUserName;
+            	} else {
+                	$this->userName = 'MagentoStore';
+            	}
+
+		return;			
+	    }
         } elseif ($slackType == self::SLACK_TYPE_CUSTOMERS) {
             $customerUserName = $slackConfig['customers']['username'];
             if(!empty($customerUserName) && isset($customerUserName)) {
                 $this->userName = $customerUserName;
                 return;
             }
-        }
-
-        $generalUserName = $slackConfig['general']['username'];
-        if(empty($this->username) && !empty($generalUserName) && isset($generalUserName)) {
-            $this->userName = $generalUserName;
         } else {
-            $this->userName = 'MagentoStore';
+            $generalUserName = $slackConfig['general']['username'];
+            if(empty($generalUserName) || !isset($generalUserName)) {
+                $this->userName = 'MagentoStore';
+            } else {
+                $this->userName = $generalUserName;
+            }
+
+            return;
         }
 
-        return;
+        $this->userName = 'MagentoStore';
     }
 
     public function prepareMessage($message, $type, $username)
@@ -148,23 +167,18 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
     {
         $messagePrepared = $this->prepareMessage($message, $type);
 
-        try {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_URL, $this->webHook);
-            curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->ttl);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => $messagePrepared));
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_URL, $this->webHook);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->ttl);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => $messagePrepared));
 
-            $result = curl_exec($ch);
-            if(!$result) {
-                return false;
-            }
-
-            return true;
-        } catch (Exception $e) {
-            Mage::log($e->getMessage());
+        $result = curl_exec($ch);
+        if(!$result) {
             return false;
         }
+
+        return true;
     }
 }
