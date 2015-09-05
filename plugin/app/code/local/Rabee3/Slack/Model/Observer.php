@@ -51,6 +51,7 @@ class Rabee3_Slack_Model_Observer
 
         $ordersCount = Mage::getModel('sales/order')->getCollection()
             ->addAttributeToFilter('created_at', array('from' => $timeFilter['from'], 'to' => $timeFilter['to']))
+            ->addAttributeToFilter('status', array('neq' => 'canceled'))
             ->count();
 
         $message = "Orders Created Last Hour : " . $ordersCount;
