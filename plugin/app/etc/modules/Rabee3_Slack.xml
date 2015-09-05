@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<config>
+        <modules>
+                <Rabee3_Slack>
+                        <codePool>local</codePool>
+                        <active>true</active>
+                </Rabee3_Slack>
+        </modules>
+</config>

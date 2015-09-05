@@ -68,8 +68,8 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
         $slackConfig = $this->slackConfig;
         $ttl = $slackConfig['general']['timeout'];
 
-        if(empty($ttl) || !is_numeric($ttl)) {
-            $this->ttl = 300;
+        if(empty($ttl) || !is_numeric($ttl) || $ttl < 1000) {
+            $this->ttl = 1000;
         } else {
             $this->ttl = $ttl;
         }
@@ -96,18 +96,16 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
                 $this->channel = $customerChannel;
                 return;
             }
-        } else {
-            $generalChannel = $slackConfig['general']['channel'];
-            if(empty($generalChannel) || !isset($generalChannel)) {
-                $this->channel = 'MagentoStore';
-            } else {
-                $this->channel = $generalChannel;
-            }
-
-            return;
         }
 
-        $this->channel = 'MagentoStore';
+        $generalChannel = $slackConfig['general']['channel'];
+        if(empty($this->channel) && !empty($generalChannel) && isset($generalChannel)) {
+            $this->channel = $generalChannel;
+        } else {
+            $this->channel = 'MagentoStore';
+        }
+
+        return;
     }
 
     public function getUsername($slackType)
@@ -126,18 +124,16 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
                 $this->userName = $customerUserName;
                 return;
             }
-        } else {
-            $generalUserName = $slackConfig['general']['username'];
-            if(empty($generalUserName) || !isset($generalUserName)) {
-                $this->userName = 'MagentoStore';
-            } else {
-                $this->userName = $generalUserName;
-            }
-
-            return;
         }
 
-        $this->userName = 'MagentoStore';
+        $generalUserName = $slackConfig['general']['username'];
+        if(empty($this->username) && !empty($generalUserName) && isset($generalUserName)) {
+            $this->userName = $generalUserName;
+        } else {
+            $this->userName = 'MagentoStore';
+        }
+
+        return;
     }
 
     public function prepareMessage($message, $type, $username)
