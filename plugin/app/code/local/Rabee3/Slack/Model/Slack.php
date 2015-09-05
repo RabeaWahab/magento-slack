@@ -148,18 +148,23 @@ class Rabee3_Slack_Model_Slack extends Mage_Core_Model_Abstract
     {
         $messagePrepared = $this->prepareMessage($message, $type);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_URL, $this->webHook);
-        curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->ttl);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => $messagePrepared));
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_URL, $this->webHook);
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, $this->ttl);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, array('payload' => $messagePrepared));
 
-        $result = curl_exec($ch);
-        if(!$result) {
+            $result = curl_exec($ch);
+            if(!$result) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception $e) {
+            Mage::log($e->getMessage());
             return false;
         }
-
-        return true;
     }
 }
