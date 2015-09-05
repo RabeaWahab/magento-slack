@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
     <name>Rabee3_Slack</name>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <stability>stable</stability>
     <license>GPLv3</license>
     <channel>community</channel>
