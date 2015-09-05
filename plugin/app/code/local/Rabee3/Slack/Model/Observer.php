@@ -25,7 +25,8 @@ class Rabee3_Slack_Model_Observer
             return $this;
         }
 
-        $order = $observer->getEvent()->getOrder();
+        $orderIds   = $observer->getEvent()->getOrderIds();
+        $order      = Mage::getModel('sales/order')->load($orderIds[0]);
 
         $orderNumber        = $order->getIncrementId();
         $orderTotal         = $order->getBaseGrandTotal();
